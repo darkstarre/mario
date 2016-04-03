@@ -1,0 +1,117 @@
+$color: rgb(255,255,255);
+$color-secondary: rgb(0,0,0);
+$color-mouth: rgb(255,0,0);
+$color-shadow: rgb(150,150,150);
+$color-blush: rgb(255,100,230);
+$grid-boo-awake: 16;
+$grid-boo-hide: 16;
+
+$colors-boo: (
+  1: $color,
+  2: $color-secondary,
+  3: $color-mouth,
+  4: $color-shadow,
+  5: $color-blush
+);
+
+$boo-awake:
+0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,
+0,0,0,0,2,2,4,4,4,4,4,2,2,0,0,0,
+0,0,0,2,4,4,1,1,1,1,1,4,4,2,0,0,
+0,0,2,4,1,1,1,1,1,1,1,1,1,4,2,0,
+0,2,4,1,1,1,1,1,1,1,2,1,2,4,2,0,
+2,4,1,2,2,2,1,1,1,1,2,1,2,1,4,2,
+2,4,1,2,1,1,2,1,1,1,2,1,2,1,4,2,
+0,2,1,2,1,1,1,1,1,1,1,1,1,1,4,2,
+2,4,1,1,2,1,1,1,1,3,1,3,1,3,4,2,
+2,4,1,1,1,1,1,1,1,3,3,3,3,3,4,2,
+2,4,1,1,1,1,1,1,1,3,3,3,3,3,4,2,
+2,4,1,1,1,1,1,1,3,3,3,3,3,4,2,0,
+0,2,4,1,1,1,1,1,3,1,3,1,3,4,2,0,
+0,0,2,4,4,1,1,1,1,1,1,4,4,2,0,0,
+0,0,0,2,2,4,4,4,4,4,4,2,2,0,0,0,
+0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0;
+
+$boo-hide:
+0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,
+0,0,0,2,2,4,4,4,4,4,2,2,0,0,0,0,
+0,0,2,4,4,1,1,1,1,1,4,4,2,0,0,0,
+0,2,4,1,1,1,1,1,1,1,1,1,4,2,0,0,
+0,2,4,1,1,1,1,1,1,1,1,1,1,4,2,0,
+2,2,4,1,1,1,1,1,1,2,2,2,1,1,4,2,
+2,4,2,2,1,1,1,2,2,1,1,1,1,1,4,2,
+2,4,1,1,2,5,2,1,1,1,1,1,1,1,2,0,
+2,4,1,1,2,5,2,1,1,1,1,1,1,1,4,2,
+2,2,2,2,2,5,2,2,2,2,2,2,1,1,4,2,
+2,5,5,5,5,5,5,5,5,5,5,1,1,1,4,2,
+0,2,4,1,1,1,1,1,1,1,1,1,1,1,1,2,
+0,2,4,1,1,2,2,1,1,1,1,1,1,4,2,0,
+0,0,2,4,4,1,1,1,1,1,1,4,4,2,0,0,
+0,0,0,2,2,4,4,4,4,4,4,2,2,0,0,0,
+0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0;
+  
+
+@function boo-hide($pixel-list, $colors: $colors, $grid: $grid-boo-hide) {
+  $shadows: ();
+  $row: 0;
+  $col: 1;
+  
+  @for $i from 1 through length($pixel-list) {
+    @if( nth($pixel-list,$i) > 0) {
+      $shadows: append($shadows, ($col * 1px) ($row * 1px) 0 map-get($colors,nth($pixel-list, $i)), 'comma');
+    }
+    
+    @if($i % $grid == 0) {
+      $row: $row+1;
+      $col: 0;
+    }
+    
+    $col: $col + 1;
+  }
+  @return $shadows;
+}
+
+@function boo-hide($pixel-list, $colors: $colors, $grid: $grid-boo-hide) {
+  $shadows: ();
+  $row: 0;
+  $col: 1;
+  
+  @for $i from 1 through length($pixel-list) {
+    @if( nth($pixel-list,$i) > 0) {
+      $shadows: append($shadows, ($col * 1px) ($row * 1px) 0 map-get($colors,nth($pixel-list, $i)), 'comma');
+    }
+    
+    @if($i % $grid == 0) {
+      $row: $row+1;
+      $col: 0;
+    }
+    
+    $col: $col + 1;
+  }
+  @return $shadows;
+}
+
+body {
+background-color: rgb(95,155,255);
+}
+
+.boo-hide {
+  position: relative;
+  width: 1px;
+  height: 1px;
+  margin: 15px;
+  
+  
+  transform: scale(15);
+  transform: rotateY(180deg);
+  
+  
+  animation: move 3.5s ease-in 1s alternate infinite;
+  box-shadow: boo-hide($boo-hide, $colors-boo, $grid-boo-hide);
+}
+
+@keyframes move {
+  100% { transform: scale(15) translateX(25px)}
+}
+
+
